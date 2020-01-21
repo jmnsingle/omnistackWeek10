@@ -1,18 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const http = require('http');
+const { setupWebsocket } = require('./websocket');
 const routes = require('./routes');
 
 const app = express();
+const server = http.Server(app);
+
+setupWebsocket(server);
 
 mongoose.connect('mongodb+srv://juliano:juli9976@cluster0-88gsg.mongodb.net/week10?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
-app.use(cors({  origin: 'http://localhost:3000' }));
+app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-app.listen(3333);
+server.listen(3333);
